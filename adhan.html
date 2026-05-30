@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مواقيت الصلاة — كلية شنكار</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #0b0f1a;
+      color: #e8dcc8;
+      font-family: 'Tajawal', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2.5rem 1rem 3rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Radial glow background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(90, 60, 20, 0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 50% 100%, rgba(20, 40, 80, 0.4) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Stars */
+    .stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .stars span {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0;
+      animation: twinkle var(--d, 4s) ease-in-out infinite var(--delay, 0s);
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.8); }
+      50%       { opacity: var(--op, 0.6); transform: scale(1); }
+    }
+
+    /* ── Header ── */
+    header {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .crescent {
+      font-size: 3rem;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      filter: drop-shadow(0 0 18px rgba(200, 160, 80, 0.7));
+    }
+
+    header h1 {
+      font-family: 'Amiri', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: #f0d990;
+      text-shadow: 0 0 24px rgba(240, 200, 80, 0.4);
+    }
+
+    header p {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: #9ab0c8;
+      margin-top: 0.35rem;
+      letter-spacing: 0.06em;
+    }
+
+    .divider {
+      width: 160px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #c8a040, transparent);
+      margin: 1rem auto;
+      opacity: 0.6;
+    }
+
+    /* ── Widget ── */
+    .widget-wrap {
+      position: relative;
+      z-index: 1;
+      width: min(560px, 95vw);
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(200, 160, 80, 0.18);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04) inset,
+        0 8px 40px rgba(0,0,0,0.6),
+        0 0 60px rgba(100, 70, 20, 0.15);
+      backdrop-filter: blur(10px);
+    }
+
+    .widget-wrap iframe {
+      display: block;
+      width: 100%;
+      height: 480px;
+      border: none;
+    }
+
+    /* ── Messages Section ── */
+    .messages {
+      position: relative;
+      z-index: 1;
+      width: min(560px, 95vw);
+      margin-top: 2rem;
+    }
+
+    .messages-title {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Amiri', serif;
+      font-size: 1.3rem;
+      color: #f0d990;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 16px rgba(240,200,80,0.3);
+    }
+
+    .messages-title::before,
+    .messages-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200,160,64,0.4));
+    }
+    .messages-title::before {
+      background: linear-gradient(270deg, transparent, rgba(200,160,64,0.4));
+    }
+
+    .msg-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(200, 160, 80, 0.14);
+      border-radius: 16px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+      transition: border-color 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .msg-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(180deg, #c8a040, transparent);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .msg-card:hover {
+      border-color: rgba(200, 160, 80, 0.35);
+      box-shadow: 0 4px 32px rgba(200,160,80,0.1);
+    }
+
+    .msg-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .msg-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.15rem;
+      line-height: 2;
+      color: #ddd0b8;
+      direction: rtl;
+    }
+
+    .msg-text strong {
+      color: #f0d990;
+      font-weight: 700;
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #4a5a70;
+      letter-spacing: 0.06em;
+    }
+
+    footer span { color: #c8a040; opacity: 0.7; }
+  </style>
+</head>
+<body>
+
+  <div class="stars" id="stars"></div>
+
+  <header>
+    <div class="crescent">☽</div>
+    <h1>مواقيت الصلاة</h1>
+    <p>كلية شنكار — رمات غان</p>
+    <div class="divider"></div>
+  </header>
+
+  <div class="widget-wrap">
+    <iframe
+      src="//mawaqit.net/ar/w/shenkar-college-ramat-gan-52001-israel?showOnly5PrayerTimes=0"
+      frameborder="0"
+      scrolling="no"
+    ></iframe>
+  </div>
+
+  <!-- Messages Section -->
+  <section class="messages">
+    <div class="messages-title">💬 رسائل وأدعية</div>
+
+    <div class="msg-card">
+      <span class="msg-icon">🤲</span>
+      <p class="msg-text">
+        <strong>اللهم بارك</strong> في القائمين على هذا البرنامج والمشاركين فيه،
+        واجعل عملهم خالصًا لوجهك الكريم، وزِدهم من حسناتهم.
+      </p>
+    </div>
+
+    <div class="msg-card">
+      <span class="msg-icon">📚</span>
+      <p class="msg-text">
+        <strong>اللهم احفظ</strong> طلاب وطالبات الكلية واهدِهم سُبُلَ السلام،
+        وجنِّبهم الفتن، واجعلهم منارات في العلم والأخلاق والفضيلة.
+      </p>
+    </div>
+
+    <div class="msg-card">
+      <span class="msg-icon">🕌</span>
+      <p class="msg-text">
+        <strong>تذكير:</strong> الصلاة عماد الدين — حافظوا عليها في أوقاتها،
+        وتقبّل الله منّا ومنكم صالح الأعمال.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    Powered by <span>Mawaqit</span> &bull; تقبّل الله صلاتكم
+  </footer>
+
+  <script>
+    const container = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const s = document.createElement('span');
+      const size = Math.random() * 2.5 + 0.5;
+      s.style.cssText = `
+        width:${size}px; height:${size}px;
+        top:${Math.random()*100}%;
+        left:${Math.random()*100}%;
+        --d:${(Math.random()*5+3).toFixed(1)}s;
+        --delay:-${(Math.random()*6).toFixed(1)}s;
+        --op:${(Math.random()*0.5+0.2).toFixed(2)};
+      `;
+      container.appendChild(s);
+    }
+  </script>
+</body>
+</html>
